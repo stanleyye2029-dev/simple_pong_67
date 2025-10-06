@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Menu</title>
+    <style>
+        body {
+            background: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(34,34,34,0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        button {
+            padding: 20px 60px;
+            font-size: 32px;
+            border-radius: 10px;
+            border: none;
+            background: #fff;
+            color: #222;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <h1 style="color: #fff; font-size: 64px; margin-bottom: 10px;">Pong</h1>
+        <div style="width: 100vw; text-align: center; margin-bottom: 40px;">
+            <span style="color: #fff; font-size: 32px; letter-spacing: 10px;">P O N G</span>
+        </div>
+        <button onclick="window.location.href='pong.html'">Pong</button>
+    </div>
+</body>
+</html>
