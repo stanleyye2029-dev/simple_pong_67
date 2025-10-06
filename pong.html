@@ -21,8 +21,7 @@
     </style>
 </head>
 <body>
-    <!-- Menu moved to menu.html -->
-    <canvas id="pong" width="800" height="600" style="z-index: 1; display: none;"></canvas>
+    <canvas id="pong" width="800" height="600" style="z-index: 1; display: block;"></canvas>
     <script>
         const canvas = document.getElementById('pong');
         const ctx = canvas.getContext('2d');
@@ -144,19 +143,10 @@
             if (e.key === 'ArrowDown') downPressed = false;
         });
 
-        let gameStarted = false;
-        function startGame() {
-            if (!gameStarted) {
-                document.getElementById('menu').style.display = 'none';
-                document.getElementById('pong').style.display = 'block';
-                gameStarted = true;
-                gameLoop();
-            }
+        // Start game automatically when page loads
+        window.onload = function() {
+            gameLoop();
         }
-
-        document.getElementById('startBtn').addEventListener('click', startGame);
-
-        // Only start game on button click
     </script>
 </body>
 </html>
