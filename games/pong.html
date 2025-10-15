@@ -151,14 +151,28 @@
     <!-- game1.html or game2.html -->
     <script>
   fetch('../home-button.html')
-    .then(response => response.text())
-    .then(data => {
-      const div = document.createElement('div');
-      div.innerHTML = data;
-      document.body.appendChild(div);
-    })
-    .catch(err => console.error('Error loading home button:', err));
-</script>
+  .then(response => response.text())
+  .then(data => {
+    const div = document.createElement('div');
+    div.innerHTML = data;
+    document.body.appendChild(div);
 
+    // Add reset button click listener
+    const resetButton = document.getElementById('reset-button');
+    if (resetButton) {
+      resetButton.addEventListener('click', resetGame);
+        function resetGame() {
+            // Reset scores and positions
+            leftScore = 0;
+            rightScore = 0;
+            leftPaddleY = canvas.height / 2 - paddleHeight / 2;
+            rightPaddleY = canvas.height / 2 - paddleHeight / 2;
+            resetBall();
+        }
+    }
+  })
+  .catch(err => console.error('Error loading home button:', err));
+
+</script>
 </body>
 </html>
