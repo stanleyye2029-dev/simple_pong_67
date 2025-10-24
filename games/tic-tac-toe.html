@@ -38,59 +38,57 @@
       background: #e9ecef;
     }
     .winner {
-  margin-top: 20px;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #FAFAFA;
-  opacity: 0;
-  transition: opacity 1s ease-in, text-shadow 0.3s ease-in-out;
-}
+      margin-top: 20px;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #FAFAFA;
+      opacity: 0;
+      transition: opacity 1s ease-in, text-shadow 0.3s ease-in-out;
+    }
 
-/* When visible (fade in) */
-.winner.show {
-  opacity: 1;
-}
+    /* When visible (fade in) */
+    .winner.show {
+      opacity: 1;
+    }
 
-/* Glowing effects for each winner */
-.winner.x-glow {
-  color: #ff4444; /* red for X */
-  text-shadow: 0 0 10px #ff4444, 0 0 20px #ff4444, 0 0 30px #ff0000;
-}
+    /* Glowing effects for each winner */
+    .winner.x-glow {
+      color: #ff4444; /* red for X */
+      text-shadow: 0 0 10px #ff4444, 0 0 20px #ff4444, 0 0 30px #ff0000;
+    }
 
-.winner.o-glow {
-  color: #448aff; /* blue for O */
-  text-shadow: 0 0 10px #448aff, 0 0 20px #448aff, 0 0 30px #0055ff;
-}
+    .winner.o-glow {
+      color: #448aff; /* blue for O */
+      text-shadow: 0 0 10px #448aff, 0 0 20px #448aff, 0 0 30px #0055ff;
+    }
 
-.winner.draw-glow {
-  color: #cccccc; /* gray for draw */
-  text-shadow: 0 0 10px #bbbbbb, 0 0 20px #999999;
-}
+    .winner.draw-glow {
+      color: #cccccc; /* gray for draw */
+      text-shadow: 0 0 10px #bbbbbb, 0 0 20px #999999;
+    }
 
-/* Neon glow for X’s winning cells */
-.cell.x-glow {
-  box-shadow: 0 0 10px #ff4444, 0 0 20px #ff4444, 0 0 30px #ff0000;
-  border-color: #ff4444;
-}
+    /* Neon glow for X’s winning cells */
+    .cell.x-glow {
+      box-shadow: 0 0 10px #ff4444, 0 0 20px #ff4444, 0 0 30px #ff0000;
+      border-color: #ff4444;
+    }
 
-/* Neon glow for O’s winning cells */
-.cell.o-glow {
-  box-shadow: 0 0 10px #448aff, 0 0 20px #448aff, 0 0 30px #0055ff;
-  border-color: #448aff;
-}
+    /* Neon glow for O’s winning cells */
+    .cell.o-glow {
+      box-shadow: 0 0 10px #448aff, 0 0 20px #448aff, 0 0 30px #0055ff;
+      border-color: #448aff;
+    }
 
-/* Optional: glow pulse animation for fun */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
+    /* Optional: glow pulse animation for fun */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
 
-.cell.x-glow, .cell.o-glow {
-  animation: pulse 1s infinite ease-in-out;
-}
-
-
+    .cell.x-glow, .cell.o-glow {
+      animation: pulse 1s infinite ease-in-out;
+    }
   </style>
 </head>
 <body>
@@ -116,64 +114,64 @@
     }
 
     function makeMove(index) {
-  if (board[index] || checkWinner()) return;
-  board[index] = currentPlayer;
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-  createBoard();
+      if (board[index] || checkWinner()) return;
+      board[index] = currentPlayer;
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      createBoard();
 
-  const result = checkWinner();
-  if (result) {
-    const { winner, pattern } = result;
-    winnerText.textContent = `${winner} wins! 🎉`;
-    winnerText.classList.add('show');
+      const result = checkWinner();
+      if (result) {
+        const { winner, pattern } = result;
+        winnerText.textContent = `${winner} wins! 🎉`;
+        winnerText.classList.add('show');
 
-    // Add glow to text
-    if (winner === 'X') {
-      winnerText.classList.add('x-glow');
-    } else {
-      winnerText.classList.add('o-glow');
+        // Add glow to text
+        if (winner === 'X') {
+          winnerText.classList.add('x-glow');
+        } else {
+          winnerText.classList.add('o-glow');
+        }
+
+        // Add glow to winning cells
+        const cells = document.querySelectorAll('.cell');
+        pattern.forEach(i => {
+          cells[i].classList.add(winner === 'X' ? 'x-glow' : 'o-glow');
+        });
+      } else if (!board.includes('')) {
+        winnerText.textContent = "It's a draw!";
+        winnerText.classList.add('show', 'draw-glow');
+      }
     }
-
-    // Add glow to winning cells
-    const cells = document.querySelectorAll('.cell');
-    pattern.forEach(i => {
-      cells[i].classList.add(winner === 'X' ? 'x-glow' : 'o-glow');
-    });
-  } else if (!board.includes('')) {
-    winnerText.textContent = "It's a draw!";
-    winnerText.classList.add('show', 'draw-glow');
-  }
-}
 
     function checkWinner() {
-  const winPatterns = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-  ];
+      const winPatterns = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
 
-  for (let pattern of winPatterns) {
-    const [a, b, c] = pattern;
-    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return { winner: board[a], pattern }; // return both winner and cells
+      for (let pattern of winPatterns) {
+        const [a, b, c] = pattern;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          return { winner: board[a], pattern }; // return both winner and cells
+        }
+      }
+      return null;
     }
-  }
-  return null;
-}
 
     function resetGame() {
-  board = Array(9).fill('');
-  currentPlayer = 'X';
-  winnerText.textContent = '';
-  winnerText.className = 'winner'; // removes glow + fade
+      board = Array(9).fill('');
+      currentPlayer = 'X';
+      winnerText.textContent = '';
+      winnerText.className = 'winner'; // removes glow + fade
 
-  const cells = document.querySelectorAll('.cell');
-  cells.forEach(cell => {
-    cell.classList.remove('x-glow', 'o-glow');
-  });
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(cell => {
+        cell.classList.remove('x-glow', 'o-glow');
+      });
 
-  createBoard();
-}
+      createBoard();
+    }
 
     // Create the game board
     createBoard();
@@ -194,6 +192,6 @@
       })
       .catch(err => console.warn('Could not load home-button.html:', err));
   </script>
-  <script src="settings/settings-widget.js"></script>
+  <script src="../settings/settings-widget.js"></script>
 </body>
 </html>
