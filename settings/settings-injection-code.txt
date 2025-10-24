@@ -1,0 +1,2 @@
+<script src="settings/settings-widget.js"></script>
+add before the closing </body> tag.
