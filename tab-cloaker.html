@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Favicon & Title Changer</title>
+</head>
+<body>
+  <h2>Customize your tab</h2>
+
+  <label>Tab title: </label>
+  <input type="text" id="titleInput" placeholder="Enter a new title">
+  <br><br>
+
+  <label>Favicon URL: </label>
+  <input type="text" id="faviconInput" placeholder="Paste image URL (e.g., https://example.com/icon.png)">
+  <br><br>
+
+  <button onclick="updateTab()">Update Tab</button>
+
+  <script>
+    function updateTab() {
+      // Update the title
+      const newTitle = document.getElementById('titleInput').value;
+      document.title = newTitle || "Default Title";
+
+      // Update the favicon
+      const iconURL = document.getElementById('faviconInput').value;
+      if (iconURL) {
+        let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+        link.type = 'image/png';
+        link.rel = 'shortcut icon';
+        link.href = iconURL;
+        document.head.appendChild(link);
+      }
+    }
+  </script>
+</body>
+</html>
