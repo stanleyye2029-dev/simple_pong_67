@@ -1,6 +1,26 @@
 console.log('Settings widget loaded');
 
 (function() {
+  // === Detect base path automatically ===
+  // Extract repo name if running on GitHub Pages
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  const repoName = isGitHubPages ? `/${pathParts[0]}` : '';
+
+  // Determine how deep the current file is (to go up as needed)
+  const depth = pathParts.length;
+  let relativePath = 'settings/settings.html';
+
+  // If inside a subfolder like /games/, go up one level
+  if (depth > (isGitHubPages ? 2 : 1)) {
+    relativePath = `../settings/settings.html`;
+  }
+
+  // Combine final path
+  const iframeSrc = `${repoName ? repoName + '/' : ''}${relativePath}`;
+
+  console.log('Resolved settings iframe path:', iframeSrc);
+
   // === Inject Settings Button ===
   const settingsBtn = document.createElement('button');
   settingsBtn.id = 'settingsBtn';
@@ -11,7 +31,7 @@ console.log('Settings widget loaded');
   const overlay = document.createElement('div');
   overlay.id = 'settingsOverlay';
   overlay.innerHTML = `
-    <iframe id="settingsFrame" src="/simple_pong_67/settings/settings.html"></iframe>
+    <iframe id="settingsFrame" src="${iframeSrc}"></iframe>
   `;
   document.body.appendChild(overlay);
 
