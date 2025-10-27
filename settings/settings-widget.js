@@ -28,7 +28,7 @@ console.log('Settings widget loaded');
       color: white;
       padding: 8px 12px;
       cursor: pointer;
-      z-index: 9999;
+      z-index: 9998;
       backdrop-filter: blur(4px);
       transition: background 0.3s;
     }
@@ -42,7 +42,7 @@ console.log('Settings widget loaded');
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 9998;
+      z-index: 9999;
     }
 
     #settingsFrame {
