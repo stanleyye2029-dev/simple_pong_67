@@ -1,6 +1,5 @@
 console.log('Settings widget loaded');
 
-// settings-widget.js
 (function() {
   // === Inject Settings Button ===
   const settingsBtn = document.createElement('button');
@@ -13,7 +12,6 @@ console.log('Settings widget loaded');
   overlay.id = 'settingsOverlay';
   overlay.innerHTML = `
     <iframe id="settingsFrame" src="../settings/settings.html"></iframe>
-    <button id="closeOverlay">Close ✖</button>
   `;
   document.body.appendChild(overlay);
 
@@ -55,19 +53,6 @@ console.log('Settings widget loaded');
       background: #fff;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
-
-    #closeOverlay {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #ff5555;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-size: 0.9em;
-    }
   `;
   document.head.appendChild(style);
 
@@ -76,7 +61,10 @@ console.log('Settings widget loaded');
     overlay.style.display = 'flex';
   });
 
-  overlay.querySelector('#closeOverlay').addEventListener('click', () => {
-    overlay.style.display = 'none';
+  // Listen for messages from the iframe
+  window.addEventListener('message', (event) => {
+    if (event.data.action === 'closeSettings') {
+      overlay.style.display = 'none';
+    }
   });
 })();

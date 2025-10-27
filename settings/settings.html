@@ -14,8 +14,12 @@
       justify-content: center;
       height: 100%;
       margin: 0;
+      position: relative;
     }
+
     h2 { margin-bottom: 20px; color: #333; }
+
+    /* Toggle Switch */
     .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
     .switch input { display: none; }
     .slider {
@@ -31,10 +35,26 @@
     }
     input:checked + .slider { background-color: #2196F3; }
     input:checked + .slider:before { transform: translateX(26px); }
+
     label { font-size: 1.1em; color: #333; }
+
+    /* Close button styling */
+    #closeSettings {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ff5555;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
+  <button id="closeSettings">✖ Close</button>
   <h2>Settings</h2>
 
   <label>Neon Mode
@@ -50,6 +70,12 @@
     toggle.addEventListener('change', () => {
       localStorage.setItem('neonMode', toggle.checked);
       window.parent.dispatchEvent(new Event('storage'));
+    });
+
+    // === Close button behavior ===
+    document.getElementById('closeSettings').addEventListener('click', () => {
+      // Tell the parent page (that contains the overlay) to hide it
+      window.parent.postMessage({ action: 'closeSettings' }, '*');
     });
   </script>
 </body>
