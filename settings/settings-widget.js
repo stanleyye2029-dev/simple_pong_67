@@ -1,17 +1,18 @@
 console.log('Settings widget loaded');
 
 (function() {
-  // === Determine iframe src relative to current page ===
-  const pathParts = window.location.pathname.split('/').filter(Boolean);
-  const currentFile = pathParts[pathParts.length - 1]; // last segment
+  // === Determine iframe src ===
+  const hostname = window.location.hostname;
   let iframeSrc;
 
-  if (currentFile === 'index.html' || currentFile === '') {
-    // Root index page
-    iframeSrc = 'settings/settings.html';
+  if (hostname.includes('github.io')) {
+    // GitHub Pages → absolute path from repo root
+    iframeSrc = '/simple_pong_67/settings/settings.html';
   } else {
-    // Pages in subfolders
-    iframeSrc = '../settings/settings.html';
+    // Local dev → relative path
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const currentFile = pathParts[pathParts.length - 1];
+    iframeSrc = (pathParts.length > 1 && currentFile !== '') ? '../settings/settings.html' : 'settings/settings.html';
   }
 
   console.log('Resolved settings iframe path:', iframeSrc);
