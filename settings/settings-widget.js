@@ -11,7 +11,7 @@ console.log('Settings widget loaded');
   const overlay = document.createElement('div');
   overlay.id = 'settingsOverlay';
   overlay.innerHTML = `
-    <iframe id="settingsFrame" src="../settings/settings.html"></iframe>
+    <iframe id="settingsFrame" src="/simple_pong_67/settings/settings.html"></iframe>
   `;
   document.body.appendChild(overlay);
 
