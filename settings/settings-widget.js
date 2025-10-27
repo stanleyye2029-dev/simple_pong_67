@@ -1,24 +1,10 @@
 console.log('Settings widget loaded');
 
 (function() {
-  // === Detect base path automatically ===
-  // Extract repo name if running on GitHub Pages
+  // === Determine iframe src relative to current page ===
   const pathParts = window.location.pathname.split('/').filter(Boolean);
-  const isGitHubPages = window.location.hostname.includes('github.io');
-  const repoName = isGitHubPages ? `/${pathParts[0]}` : '';
-
-  // Determine how deep the current file is (to go up as needed)
-  const depth = pathParts.length;
-  let relativePath = 'settings/settings.html';
-
-  // If inside a subfolder like /games/, go up one level
-  if (depth > (isGitHubPages ? 2 : 1)) {
-    relativePath = `../settings/settings.html`;
-  }
-
-  // Combine final path
-  const iframeSrc = `${repoName ? repoName + '/' : ''}${relativePath}`;
-
+  const depth = pathParts.length; // e.g., ["simple_pong_67","games","pong.html"] => 3
+  const iframeSrc = depth > 1 ? '../settings/settings.html' : 'settings/settings.html';
   console.log('Resolved settings iframe path:', iframeSrc);
 
   // === Inject Settings Button ===
@@ -30,9 +16,7 @@ console.log('Settings widget loaded');
   // === Inject Overlay + iFrame ===
   const overlay = document.createElement('div');
   overlay.id = 'settingsOverlay';
-  overlay.innerHTML = `
-    <iframe id="settingsFrame" src="${iframeSrc}"></iframe>
-  `;
+  overlay.innerHTML = `<iframe id="settingsFrame" src="${iframeSrc}"></iframe>`;
   document.body.appendChild(overlay);
 
   // === Inject CSS Styles ===
@@ -81,7 +65,6 @@ console.log('Settings widget loaded');
     overlay.style.display = 'flex';
   });
 
-  // Listen for messages from the iframe
   window.addEventListener('message', (event) => {
     if (event.data.action === 'closeSettings') {
       overlay.style.display = 'none';
