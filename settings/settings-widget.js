@@ -3,8 +3,17 @@ console.log('Settings widget loaded');
 (function() {
   // === Determine iframe src relative to current page ===
   const pathParts = window.location.pathname.split('/').filter(Boolean);
-  const depth = pathParts.length; // e.g., ["simple_pong_67","games","pong.html"] => 3
-  const iframeSrc = depth > 1 ? '../settings/settings.html' : 'settings/settings.html';
+  const currentFile = pathParts[pathParts.length - 1]; // last segment
+  let iframeSrc;
+
+  if (currentFile === 'index.html' || currentFile === '') {
+    // Root index page
+    iframeSrc = 'settings/settings.html';
+  } else {
+    // Pages in subfolders
+    iframeSrc = '../settings/settings.html';
+  }
+
   console.log('Resolved settings iframe path:', iframeSrc);
 
   // === Inject Settings Button ===
