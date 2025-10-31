@@ -175,5 +175,17 @@
 
 </script>
 <script src="../settings/settings-widget.js"></script>
+<script>
+  const title = localStorage.getItem('tabTitle');
+  const favicon = localStorage.getItem('tabFavicon');
+
+  if (title) document.title = title;
+  if (favicon) {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.href = favicon;
+    document.head.appendChild(link);
+  }
+</script>
 </body>
 </html>

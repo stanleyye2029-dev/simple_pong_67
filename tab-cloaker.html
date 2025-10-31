@@ -3,6 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <title>Favicon & Title Changer</title>
+
+  <style>
+    body {
+      margin-top: 200px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    input {
+      width: 300px;
+      padding: 8px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin: 3px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .preset-container {
+      margin: 20px 0;
+    }
+
+    .preset-container button {
+      background-color: #28a745;
+    }
+
+    .preset-container button:hover {
+      background-color: #1e7e34;
+    }
+  </style>
 </head>
 <body>
   <h2>Customize your tab</h2>
@@ -15,23 +58,123 @@
   <input type="text" id="faviconInput" placeholder="Paste image URL (e.g., https://example.com/icon.png)">
   <br><br>
 
+  <!-- 🌟 Preset Buttons -->
+  <div class="preset-container">
+    <h3>Presets</h3>
+    <div id="preset-buttons"></div>
+  </div>
+
   <button onclick="updateTab()">Update Tab</button>
+  <button id="reset-button">Reset Tab</button>
+
+  <div id="home-button-container"></div>
 
   <script>
-    function updateTab() {
-      // Update the title
-      const newTitle = document.getElementById('titleInput').value;
-      document.title = newTitle || "Default Title";
+    // 🎨 Preset options
+    const presets = {
+      Google: { title: "Google", favicon: "https://www.google.com/favicon.ico" },
+      YouTube: { title: "YouTube", favicon: "https://www.youtube.com/favicon.ico" },
+      GitHub: { title: "GitHub", favicon: "https://github.githubassets.com/favicons/favicon.png" },
+      Default: { title: "Default Title", favicon: "default-icon.png" },
+      "Google Classroom": { title: "Google Classroom", favicon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Google_Classroom_Logo.svg" },
+      "Stack Overflow": { title: "Stack Overflow", favicon: "https://cdn.sstatic.net/Sites/stackoverflow/img/favicon.ico" }
+    };
 
-      // Update the favicon
-      const iconURL = document.getElementById('faviconInput').value;
-      if (iconURL) {
-        let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-        link.type = 'image/png';
-        link.rel = 'shortcut icon';
-        link.href = iconURL;
-        document.head.appendChild(link);
+    // 🔄 Apply saved settings immediately when the page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTitle = localStorage.getItem('tabTitle');
+      const savedFavicon = localStorage.getItem('tabFavicon');
+
+      if (savedTitle) {
+        document.getElementById('titleInput').value = savedTitle;
+        document.title = savedTitle;
       }
+
+      if (savedFavicon) {
+        document.getElementById('faviconInput').value = savedFavicon;
+        setFavicon(savedFavicon);
+      }
+
+      generatePresetButtons(); // generate preset buttons
+      loadHomeButton();        // load external home button
+    });
+
+    // 🧠 Save and update both title and favicon
+    function updateTab() {
+      const newTitle = document.getElementById('titleInput').value.trim();
+      const iconURL = document.getElementById('faviconInput').value.trim();
+
+      localStorage.setItem('tabTitle', newTitle);
+      localStorage.setItem('tabFavicon', iconURL);
+
+      document.title = newTitle || presets.Default.title;
+      setFavicon(iconURL || presets.Default.favicon);
+    }
+
+    // 🧩 Helper to set favicon dynamically
+    function setFavicon(iconURL) {
+      document.querySelectorAll("link[rel*='icon']").forEach(el => el.remove());
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.type = iconURL.endsWith('.ico') ? 'image/x-icon' : 'image/png';
+      link.href = iconURL || presets.Default.favicon;
+      document.head.appendChild(link);
+    }
+
+    // 🪄 Apply preset selection
+    function applyPreset(name) {
+      const preset = presets[name];
+      if (!preset) return;
+
+      document.getElementById('titleInput').value = preset.title;
+      document.getElementById('faviconInput').value = preset.favicon;
+
+      updateTab();
+    }
+
+    // ⚡ Dynamically generate preset buttons
+    function generatePresetButtons() {
+      const container = document.getElementById('preset-buttons');
+      container.innerHTML = '';
+
+      Object.keys(presets).forEach(name => {
+        const btn = document.createElement('button');
+        btn.textContent = name;
+        btn.onclick = () => applyPreset(name);
+        container.appendChild(btn);
+      });
+    }
+
+    // 💾 Auto-apply saved tab settings every time the page opens
+    (function autoApplySavedSettings() {
+      const title = localStorage.getItem('tabTitle');
+      const favicon = localStorage.getItem('tabFavicon');
+      if (title) document.title = title;
+      if (favicon) setFavicon(favicon);
+    })();
+
+    // 🔄 Reset tab to default settings
+    const resetButton = document.getElementById('reset-button');
+    resetButton.addEventListener('click', () => {
+      localStorage.removeItem('tabTitle');
+      localStorage.removeItem('tabFavicon');
+
+      document.getElementById('titleInput').value = '';
+      document.getElementById('faviconInput').value = '';
+
+      document.title = presets.Default.title;
+      setFavicon(presets.Default.favicon);
+    });
+
+    // 🏠 Load external home button
+    function loadHomeButton() {
+      fetch('../home-button.html')
+        .then(response => response.text())
+        .then(data => {
+          const div = document.getElementById('home-button-container');
+          div.innerHTML = data;
+        })
+        .catch(err => console.error('Error loading home button:', err));
     }
   </script>
 </body>
