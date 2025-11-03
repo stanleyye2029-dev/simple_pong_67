@@ -166,7 +166,7 @@
     });
 
             // 🏠 Load only the home button and move it to the top-right corner
-    fetch('../home-button.html')
+    fetch('/home-button.html')
       .then(response => response.text())
       .then(data => {
         const tempDiv = document.createElement('div');
@@ -180,7 +180,7 @@
           document.body.appendChild(homeButtonContainer);
         }
 
-        // Add the home button's style, modified for top-right placement
+        // Add the home button's style, modified for top-left placement
         const style = document.createElement('style');
         style.textContent = `
           #home-button {
