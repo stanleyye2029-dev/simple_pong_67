@@ -45,6 +45,12 @@ console.log('Settings widget loaded');
       z-index: 9998;
       backdrop-filter: blur(4px);
       transition: background 0.3s;
+      /* Added black border effect around text */
+      text-shadow: 
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
     }
     #settingsBtn:hover { background: rgba(255,255,255,0.2); }
 

@@ -77,7 +77,6 @@
       GitHub: { title: "GitHub", favicon: "https://github.githubassets.com/favicons/favicon.png" },
       Default: { title: "Default Title", favicon: "default-icon.png" },
       "Google Classroom": { title: "Google Classroom", favicon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Google_Classroom_Logo.svg" },
-      "Stack Overflow": { title: "Stack Overflow", favicon: "https://cdn.sstatic.net/Sites/stackoverflow/img/favicon.ico" }
     };
 
     // 🔄 Apply saved settings immediately when the page loads
@@ -166,16 +165,45 @@
       setFavicon(presets.Default.favicon);
     });
 
-    // 🏠 Load external home button
-    function loadHomeButton() {
-      fetch('../home-button.html')
-        .then(response => response.text())
-        .then(data => {
-          const div = document.getElementById('home-button-container');
-          div.innerHTML = data;
-        })
-        .catch(err => console.error('Error loading home button:', err));
-    }
+            // 🏠 Load only the home button and move it to the top-right corner
+    fetch('../home-button.html')
+      .then(response => response.text())
+      .then(data => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = data;
+
+        // Extract only the home button container
+        const homeButtonContainer = tempDiv.querySelector('#home-button-container');
+        const homeButtonStyle = tempDiv.querySelector('style');
+
+        if (homeButtonContainer) {
+          document.body.appendChild(homeButtonContainer);
+        }
+
+        // Add the home button's style, modified for top-right placement
+        const style = document.createElement('style');
+        style.textContent = `
+          #home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-family: sans-serif;
+            color: black;
+            border-radius: 5px;
+            z-index: 1000;
+          }
+          #home-button:hover {
+            background-color: #ddd;
+          }
+        `;
+        document.head.appendChild(style);
+      })
+      .catch(error => console.error('Error loading home button:', error));
   </script>
+  <script src="../settings/settings-widget.js"></script>
 </body>
 </html>
