@@ -6,22 +6,17 @@
 <script>
   (function() {
     const homeButton = document.getElementById("home-button");
-    const url = window.location;
+    const host = window.location.hostname;
 
-    // Detect if running on GitHub Pages
-    if (url.hostname.includes("github.io")) {
-      // Always link back to your GitHub Pages project root
+    // ✅ If on GitHub Pages, go directly to your project root
+    if (host.includes("github.io")) {
       homeButton.href = "https://stanleyye2029-dev.github.io/simple_pong_67/";
-    } else {
-      // Running locally or elsewhere
-      const path = url.pathname;
-      if (path.split("/").length > 2) {
-        // Inside a folder — go up one level to root index.html
-        homeButton.href = "../index.html";
-      } else {
-        // Already in root
-        homeButton.href = "index.html";
-      }
+    } 
+    // ✅ If running locally (e.g. file:// or localhost)
+    else {
+      const path = window.location.pathname;
+      const isInSubfolder = path.split("/").length > 2;
+      homeButton.href = isInSubfolder ? "../index.html" : "index.html";
     }
   })();
 </script>
