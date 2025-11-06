@@ -76,7 +76,7 @@
       YouTube: { title: "YouTube", favicon: "https://www.youtube.com/favicon.ico" },
       GitHub: { title: "GitHub", favicon: "https://github.githubassets.com/favicons/favicon.png" },
       Default: { title: "Default Title", favicon: "default-icon.png" },
-      "Google Classroom": { title: "Google Classroom", favicon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Google_Classroom_Logo.svg" },
+      "Google Classroom": { title: "Google Classroom", favicon: "https://ssl.gstatic.com/classroom/ic_product_classroom_144.png" },
     };
 
     // 🔄 Apply saved settings immediately when the page loads
@@ -166,7 +166,7 @@
     });
 
             // 🏠 Load only the home button and move it to the top-right corner
-    fetch('/home-button.html')
+    fetch('home-button.html')
       .then(response => response.text())
       .then(data => {
         const tempDiv = document.createElement('div');
