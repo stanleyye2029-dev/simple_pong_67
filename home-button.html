@@ -6,32 +6,23 @@
 <script>
   (function() {
     const homeButton = document.getElementById("home-button");
-    const { origin, pathname, hostname } = window.location;
+    const url = window.location;
 
-    // Name of your GitHub Pages project
-    const projectName = "simple_pong_67";
-
-    let homeURL;
-
-    if (hostname.includes("github.io")) {
-      // We're on GitHub Pages — find project root automatically
-      const projectIndex = pathname.indexOf(`/${projectName}/`);
-      if (projectIndex !== -1) {
-        // Build full path to project root
-        homeURL = `${origin}/${projectName}/`;
-      } else {
-        // Fallback (rare case)
-        homeURL = `${origin}/`;
-      }
+    // Detect if running on GitHub Pages
+    if (url.hostname.includes("github.io")) {
+      // Always link back to your GitHub Pages project root
+      homeButton.href = "https://stanleyye2029-dev.github.io/simple_pong_67/";
     } else {
-      // Not on GitHub Pages (local file or localhost)
-      // Detect if inside a subfolder
-      const isInSubfolder = pathname.split("/").length > 2;
-      homeURL = isInSubfolder ? `${origin}/index.html` : "index.html";
+      // Running locally or elsewhere
+      const path = url.pathname;
+      if (path.split("/").length > 2) {
+        // Inside a folder — go up one level to root index.html
+        homeButton.href = "../index.html";
+      } else {
+        // Already in root
+        homeButton.href = "index.html";
+      }
     }
-
-    // Apply link
-    homeButton.href = homeURL;
   })();
 </script>
 
