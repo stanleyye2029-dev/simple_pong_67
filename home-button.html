@@ -3,6 +3,22 @@
   <a href="../index.html" id="home-button">🏠 Home</a>
 </div>
 
+<script>
+  (function() {
+    const homeButton = document.getElementById("home-button");
+    const path = window.location.pathname;
+
+    // If the current page is not in the root (e.g. /folder/page.html)
+    if (path.split("/").length > 2) {
+      // Always send the user to the root index.html
+      homeButton.href = window.location.origin + "/index.html";
+    } else {
+      // If already in the root, just link to index.html
+      homeButton.href = "index.html";
+    }
+  })();
+</script>
+
 <style>
   #home-button {
     position: fixed;
