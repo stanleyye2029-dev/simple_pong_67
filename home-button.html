@@ -3,27 +3,18 @@
   <a href="../index.html" id="home-button">🏠 Home</a>
 </div>
 
+
 <script>
   (function() {
     const homeButton = document.getElementById("home-button");
-    const { hostname, origin, pathname } = window.location;
 
-    // Name of your GitHub Pages project
-    const projectName = "simple_pong_67";
-
-    if (hostname.includes("github.io")) {
-      // If the current path already contains your project folder
-      if (pathname.includes(`/${projectName}/`)) {
-        // ✅ Always go to the correct project home
-        homeButton.href = `${origin}/${projectName}/`;
-      } else {
-        // Fallback (shouldn't happen, but safe)
-        homeButton.href = `${origin}/`;
-      }
+    // Check if running on GitHub Pages
+    if (window.location.hostname.includes("github.io")) {
+      // Always link to your project root
+      homeButton.href = "https://stanleyye2029-dev.github.io/simple_pong_67/";
     } else {
-      // Running locally or elsewhere
-      const isInSubfolder = pathname.split("/").length > 2;
-      homeButton.href = isInSubfolder ? "../index.html" : "index.html";
+      // Local testing: go to index.html
+      homeButton.href = "index.html";
     }
   })();
 </script>
