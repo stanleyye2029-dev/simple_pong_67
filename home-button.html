@@ -3,6 +3,7 @@
   <a href="../index.html" id="home-button">🏠 Home</a>
 </div>
 
+
 <script>
   (function() {
     const homeButton = document.getElementById("home-button");
@@ -13,14 +14,13 @@
     // Detect if running on GitHub Pages
     const isGitHubPages = hostname.includes("github.io");
 
-    // If running on GitHub Pages, redirect to your project root
     if (isGitHubPages) {
-      // Go to the project root (e.g., https://username.github.io/simple_pong_67/)
+      // Always go to your GitHub Pages project root
       homeButton.href = `${origin}/simple_pong_67/`;
     } else {
-      // If not on GitHub Pages (local or other server)
+      // Not on GitHub Pages — likely running locally
       if (path.split("/").length > 2) {
-        // Page is inside a folder — go to root index.html
+        // Inside a subfolder
         homeButton.href = `${origin}/index.html`;
       } else {
         // Already in root folder
