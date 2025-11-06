@@ -7,14 +7,25 @@
   (function() {
     const homeButton = document.getElementById("home-button");
     const path = window.location.pathname;
+    const origin = window.location.origin;
+    const hostname = window.location.hostname;
 
-    // If the current page is not in the root (e.g. /folder/page.html)
-    if (path.split("/").length > 2) {
-      // Always send the user to the root index.html
-      homeButton.href = window.location.origin + "/index.html";
+    // Detect if running on GitHub Pages
+    const isGitHubPages = hostname.includes("github.io");
+
+    // If running on GitHub Pages, redirect to your project root
+    if (isGitHubPages) {
+      // Go to the project root (e.g., https://username.github.io/simple_pong_67/)
+      homeButton.href = `${origin}/simple_pong_67/`;
     } else {
-      // If already in the root, just link to index.html
-      homeButton.href = "index.html";
+      // If not on GitHub Pages (local or other server)
+      if (path.split("/").length > 2) {
+        // Page is inside a folder — go to root index.html
+        homeButton.href = `${origin}/index.html`;
+      } else {
+        // Already in root folder
+        homeButton.href = "index.html";
+      }
     }
   })();
 </script>
