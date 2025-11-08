@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES-256 Encryption/Decryption</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>AES-256 Encryption/Decryption</h1>
+
+    <div>
+        <label for="plaintext">Plaintext:</label>
+        <textarea id="plaintext"></textarea>
+    </div>
+    <div>
+        <label for="password">Password (Key Derivation):</label>
+        <input type="text" id="password">
+    </div>
+    <button onclick="encryptText()">Encrypt</button>
+
+    <hr>
+
+    <div>
+        <label for="ciphertext">Ciphertext (Base64):</label>
+        <textarea id="ciphertext" readonly></textarea>
+    </div>
+    <div>
+        <label for="decryptedText">Decrypted Text:</label>
+        <textarea id="decryptedText" readonly></textarea>
+    </div>
+    <button onclick="decryptText()">Decrypt</button>
+
+    <script>
+        async function getKeyMaterial(password) {
+            const enc = new TextEncoder();
+            return window.crypto.subtle.importKey(
+                "raw",
+                enc.encode(password),
+                { name: "PBKDF2" },
+                false,
+                ["deriveBits", "deriveKey"]
+            );
+        }
+
+        async function getSecretKey(keyMaterial, salt) {
+            return window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: salt,
+                    iterations: 100000,
+                    hash: "SHA-256",
+                },
+                keyMaterial,
+                { name: "AES-CBC", length: 256 },
+                true,
+                ["encrypt", "decrypt"]
+            );
+        }
+
+        async function encryptText() {
+            const plaintext = document.getElementById('plaintext').value;
+            const password = document.getElementById('password').value;
+
+            if (!plaintext || !password) {
+                alert("Please enter both plaintext and password.");
+                return;
+            }
+
+            const keyMaterial = await getKeyMaterial(password);
+            const salt = window.crypto.getRandomValues(new Uint8Array(16)); // 16 bytes for salt
+            const iv = window.crypto.getRandomValues(new Uint8Array(16)); // 16 bytes for IV
+
+            const secretKey = await getSecretKey(keyMaterial, salt);
+
+            const encrypted = await window.crypto.subtle.encrypt(
+                {
+                    name: "AES-CBC",
+                    iv: iv,
+                },
+                secretKey,
+                new TextEncoder().encode(plaintext)
+            );
+
+            // Combine salt, IV, and ciphertext for storage/transmission
+            const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+            combined.set(salt, 0);
+            combined.set(iv, salt.length);
+            combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+
+            document.getElementById('ciphertext').value = btoa(String.fromCharCode(...combined));
+        }
+
+        async function decryptText() {
+            const ciphertextBase64 = document.getElementById('ciphertext').value;
+            const password = document.getElementById('password').value;
+
+            if (!ciphertextBase64 || !password) {
+                alert("Please enter both ciphertext and password.");
+                return;
+            }
+
+            const combined = Uint8Array.from(atob(ciphertextBase64), c => c.charCodeAt(0));
+
+            const salt = combined.slice(0, 16);
+            const iv = combined.slice(16, 32);
+            const encryptedBytes = combined.slice(32);
+
+            const keyMaterial = await getKeyMaterial(password);
+            const secretKey = await getSecretKey(keyMaterial, salt);
+
+            try {
+                const decrypted = await window.crypto.subtle.decrypt(
+                    {
+                        name: "AES-CBC",
+                        iv: iv,
+                    },
+                    secretKey,
+                    encryptedBytes
+                );
+                document.getElementById('decryptedText').value = new TextDecoder().decode(decrypted);
+            } catch (error) {
+                alert("Decryption failed. Please check your password and ciphertext.");
+                console.error("Decryption error:", error);
+            }
+        }
+    </script>
+</body>
+</html>
